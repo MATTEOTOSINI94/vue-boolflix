@@ -1,10 +1,11 @@
 <template>
   <div id="app">
     <Head @callMe="searchAll"></Head>
+   <Card :moviees="this.movies" :serie="this.series" :flag="this.flags" :findValue="this.value" :cardBg="this.copertina"></Card>
     <!-- <input type="text"  v-model="filterBar" @keyup.enter="searchAll"> -->
-    <ul class="text-center">
+    <!-- <ul class="text-center row">
       <h1>FILM..</h1>
-      <li v-for="(movie) in movies" :key="movie.id">
+      <li class="col-3" v-for="(movie) in movies" :key="movie.id">
         <h2>titolo:{{movie.title}}</h2>
            <p>Titolo Originale: ({{movie.original_title}}) </p> 
            Bandiera:<img class="flag" :src="flags[movie.original_language] || flags.default" alt=""> {{movie.original_language}} <br>
@@ -13,7 +14,7 @@
            <img :src="copertina(movie.poster_path)" alt="">
       </li>
         <h1>SERIE TV..</h1>
-       <li v-for="(series) in series" :key="series.id">
+       <li class="col-3" v-for="(series) in series" :key="series.id">
           {{series.name}} ({{ series.original_name}}) 
           <img class="flag" :src="flags[series.original_language] || flags.default" alt="">
           {{series.original_language}} <br>
@@ -22,7 +23,7 @@
           <img :src="copertina(series.backdrop_path)" alt=""> 
        </li>
 
-    </ul>
+    </ul> -->
   </div>
 </template>
 
@@ -30,20 +31,21 @@
 
 import axios from 'axios'
 import Head from "./components/Head.vue"
+import Card from "./components/card.vue"
 // import { filter } from 'vue/types/umd'
 
 export default {
   name: 'App',
 
   components:{
-    Head
+    Head,
+    Card
   },
  data(){
    return{
 
      keyApi:"c1f56e9f69a038bc79759d802d8810c2",
      urlApi:"https://api.themoviedb.org/3",
-     
      movies:[],
      series:[],
      flags:{
@@ -67,7 +69,7 @@ export default {
 
     copertina(path){
       if (path === null) {
-        return urlImg = "https://martialartsplusinc.com/wp-content/uploads/2017/04/default-image-620x600.jpg"
+        return urlImg = "https://www.nato-pa.int/sites/default/files/default_images/default-image.jpg"
       }
       let url = "https://image.tmdb.org/t/p/w342/" ;
       let urlImg =  url + path
