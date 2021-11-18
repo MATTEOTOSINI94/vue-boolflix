@@ -1,20 +1,26 @@
 <template>
   <div id="app">
-
-    <input type="text"  v-model="filterBar" @keyup.enter="searchAll">
-    <ul>
+    <Head @callMe="searchAll"></Head>
+    <!-- <input type="text"  v-model="filterBar" @keyup.enter="searchAll"> -->
+    <ul class="text-center">
       <h1>FILM..</h1>
       <li v-for="(movie) in movies" :key="movie.id">
-        {{movie.title}} ({{movie.original_title}}) <img :src="flags[movie.original_language] || flags.default" alt=""> {{movie.original_language}} <br>
-        {{movie.vote_average}}
+        <h2>titolo:{{movie.title}}</h2>
+           <p>Titolo Originale: ({{movie.original_title}}) </p> 
+           Bandiera:<img class="flag" :src="flags[movie.original_language] || flags.default" alt=""> {{movie.original_language}} <br>
+           <span><i v-for="(voto) in value(movie.vote_average)" :key="voto.id"  class="fa fa-star" aria-hidden="true"></i><i v-for="voti in (5- value(movie.vote_average)) " :key="voti.id" class="fa fa-star-o" aria-hidden="true"></i> </span>
+           voto: {{value(movie.vote_average)}}
+           <img :src="copertina(movie.poster_path)" alt="">
       </li>
         <h1>SERIE TV..</h1>
-      <li v-for="(series) in series" :key="series.id">
-      {{series.name}} ({{ series.original_name}}) 
-      <img :src="flags[series.original_language] || flags.default" alt="">
-      {{series.original_language}} <br>
-      {{series.vote_average}}
-      </li>
+       <li v-for="(series) in series" :key="series.id">
+          {{series.name}} ({{ series.original_name}}) 
+          <img class="flag" :src="flags[series.original_language] || flags.default" alt="">
+          {{series.original_language}} <br>
+           <span><i v-for="(voto) in value(series.vote_average)" :key="voto.id"  class="fa fa-star" aria-hidden="true"></i><i v-for="voti in (5- value(series.vote_average)) " :key="voti.id" class="fa fa-star-o" aria-hidden="true"></i> </span>
+          {{value(series.vote_average)}}
+          <img :src="copertina(series.backdrop_path)" alt=""> 
+       </li>
 
     </ul>
   </div>
@@ -23,14 +29,21 @@
 <script>
 
 import axios from 'axios'
+import Head from "./components/Head.vue"
+// import { filter } from 'vue/types/umd'
 
 export default {
   name: 'App',
+
+  components:{
+    Head
+  },
  data(){
    return{
+
      keyApi:"c1f56e9f69a038bc79759d802d8810c2",
      urlApi:"https://api.themoviedb.org/3",
-     filterBar:"",
+     
      movies:[],
      series:[],
      flags:{
@@ -45,19 +58,39 @@ export default {
 
   methods:{
 
-    searchAll(){
-      if (this.filterBar === "") {
+    value(numero){
+      let filterNumber = numero / 2
+      return  Math.round(filterNumber)
+      
+    },
+
+
+    copertina(path){
+      if (path === null) {
+        return urlImg = "https://martialartsplusinc.com/wp-content/uploads/2017/04/default-image-620x600.jpg"
+      }
+      let url = "https://image.tmdb.org/t/p/w342/" ;
+      let urlImg =  url + path
+      return urlImg
+
+    },
+
+    
+
+    searchAll(filter){
+      if (filter === "") {
           return this.movies  = [],
                   this.series = []
       }
-        this.filmCall("/search/movie","movies")
-        this.filmCall("/search/tv","series")
+        this.filmCall("/search/movie","movies",filter)
+        this.filmCall("/search/tv","series",filter)
     },
 
-    filmCall(tipologia ,contenitore){ axios.get(this.urlApi + tipologia,{
+    filmCall(tipologia,contenitore,filter){ axios.get(this.urlApi + tipologia,{
        params:{
          api_key: this.keyApi,
-         query: this.filterBar
+         query: filter,
+         lenguage: "it"
        }
      }).then(lista => {
        this[contenitore] = lista.data.results
@@ -73,10 +106,12 @@ export default {
 
 <style lang="scss">
 @import "~bootstrap/scss/bootstrap";
+@import "~font-awesome/css/font-awesome.css";
+
 #app {
-  h1{color: black;}
-  img{
-    width: 100px;
-  }
+  
+ .flag{
+   width: 50px;
+ }
 }
 </style>
