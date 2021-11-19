@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <Head @callMe="searchAll"></Head>
-   <Card :moviees="this.movies" :serie="this.series" :flag="this.flags" :findValue="this.value" :cardBg="this.copertina"></Card>
+   
+      <Card :moviees="this.movies" :serie="this.series" :flag="this.flags" :findValue="this.value" :cardBg="this.copertina" :funzioneTry="this.checkTitle" ></Card>
+  
+    
     <!-- <input type="text"  v-model="filterBar" @keyup.enter="searchAll"> -->
     <!-- <ul class="text-center row">
       <h1>FILM..</h1>
@@ -32,6 +35,7 @@
 import axios from 'axios'
 import Head from "./components/Head.vue"
 import Card from "./components/card.vue"
+
 // import { filter } from 'vue/types/umd'
 
 export default {
@@ -39,6 +43,7 @@ export default {
 
   components:{
     Head,
+    
     Card
   },
  data(){
@@ -76,7 +81,14 @@ export default {
       return urlImg
 
     },
-
+    checkTitle(movieTitle,title){ 
+        if (movieTitle === title) {
+          return title = ""
+        }
+        else{
+          return title
+        }
+     },
     
 
     searchAll(filter){
@@ -100,9 +112,7 @@ export default {
   },
 
 
-   mounted(){
-   
- }
+ 
 }
 </script>
 
