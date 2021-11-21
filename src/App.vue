@@ -1,32 +1,7 @@
 <template>
   <div id="app">
     <Head @callMe="searchAll"></Head>
-   
-      <Card :moviees="this.movies" :serie="this.series" :flag="this.flags" :findValue="this.value" :cardBg="this.copertina" :funzioneTry="this.checkTitle" ></Card>
-  
-    
-    <!-- <input type="text"  v-model="filterBar" @keyup.enter="searchAll"> -->
-    <!-- <ul class="text-center row">
-      <h1>FILM..</h1>
-      <li class="col-3" v-for="(movie) in movies" :key="movie.id">
-        <h2>titolo:{{movie.title}}</h2>
-           <p>Titolo Originale: ({{movie.original_title}}) </p> 
-           Bandiera:<img class="flag" :src="flags[movie.original_language] || flags.default" alt=""> {{movie.original_language}} <br>
-           <span><i v-for="(voto) in value(movie.vote_average)" :key="voto.id"  class="fa fa-star" aria-hidden="true"></i><i v-for="voti in (5- value(movie.vote_average)) " :key="voti.id" class="fa fa-star-o" aria-hidden="true"></i> </span>
-           voto: {{value(movie.vote_average)}}
-           <img :src="copertina(movie.poster_path)" alt="">
-      </li>
-        <h1>SERIE TV..</h1>
-       <li class="col-3" v-for="(series) in series" :key="series.id">
-          {{series.name}} ({{ series.original_name}}) 
-          <img class="flag" :src="flags[series.original_language] || flags.default" alt="">
-          {{series.original_language}} <br>
-           <span><i v-for="(voto) in value(series.vote_average)" :key="voto.id"  class="fa fa-star" aria-hidden="true"></i><i v-for="voti in (5- value(series.vote_average)) " :key="voti.id" class="fa fa-star-o" aria-hidden="true"></i> </span>
-          {{value(series.vote_average)}}
-          <img :src="copertina(series.backdrop_path)" alt=""> 
-       </li>
-
-    </ul> -->
+      <Main :moviees="this.movies" :serie="this.series" :flag="this.flags" :findValue="this.value" :cardBg="this.copertina" :funzioneTry="this.checkTitle" ></Main>
   </div>
 </template>
 
@@ -34,17 +9,16 @@
 
 import axios from 'axios'
 import Head from "./components/Head.vue"
-import Card from "./components/card.vue"
+import Main from "./components/Main.vue"
 
-// import { filter } from 'vue/types/umd'
 
 export default {
   name: 'App',
 
   components:{
     Head,
-    
-    Card
+  
+    Main
   },
  data(){
    return{
@@ -53,6 +27,7 @@ export default {
      urlApi:"https://api.themoviedb.org/3",
      movies:[],
      series:[],
+     Actors:[],
      flags:{
        en:require("./assets/en.png"),
        fr:require("./assets/fr.svg"),
@@ -104,10 +79,13 @@ export default {
        params:{
          api_key: this.keyApi,
          query: filter,
-         lenguage: "it"
+         lenguage: "it",
+         
+         
        }
      }).then(lista => {
        this[contenitore] = lista.data.results
+       
      })},
   },
 

@@ -1,0 +1,60 @@
+.card-box{
+    position: relative;
+    list-style: none;
+     cursor: pointer;
+        width: 320px;
+        height:480px;
+
+
+        h2,p{
+          color: white;
+        }
+
+}
+
+.front{
+
+  img{
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+  }
+}
+
+    .middle{
+        position: absolute;
+        left:50%;
+        bottom: 50%;
+        transform: translate(-50%, 50%);
+    }
+
+   .front, .back{
+        width:100%;
+        height: 100%;
+        overflow:hidden;
+        backface-visibility: hidden;
+        position:absolute;
+        transition: transform .5s linear;
+        bottom: 0;
+        left: 0;
+        }
+        
+        .back{
+        background:rgba(0, 0, 0, 0.748);
+        transform:rotateY(180deg);
+}
+
+.card-box:hover > .front{
+  transform: perspective(600px) rotateY(-180deg);
+}
+.card-box:hover > .back{
+  transform: perspective(600px) rotateY(0deg);
+}
+
+.flag-full{
+    color: yellow;
+}
+.stars-empty{
+  color: white;
+}
